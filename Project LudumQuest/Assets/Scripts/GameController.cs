@@ -2,35 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class GameController
 {
+    private static GameController instance;
 
-    /// <summary>
-    /// Maybe all this has to be on the levelController and not there, but I will start coding and if it fits, it fits xD
-    /// </summary>
-    private float levelLife = 100f;
+    public PlayerController PlayerController;
 
-    [SerializeField] private float speedDestruction = 0.01f;
-
-    private bool destroying = true;
-    // Start is called before the first frame update
-    void Start()
+    private GameController()
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    public static GameController getInstance()
     {
-        if (destroying)
-        {
-            destroyLevel();
-        }
-    }
-
-    //Maybe a levelClass method
-    void destroyLevel()
-    {
-        levelLife -= speedDestruction;
+        if (instance == null)
+            instance = new GameController();
+        return instance;
     }
 }
