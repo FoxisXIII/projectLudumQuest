@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4603936617844557454}
   - component: {fileID: 80780254234378980}
+  - component: {fileID: 3696508399827949930}
   - component: {fileID: 740292405825537653}
   m_Layer: 0
   m_Name: Ink
@@ -84,6 +85,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3696508399827949930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189737108975667078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5c09f9d1fc57724d8d4d917cbb9f9f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &740292405825537653
 BoxCollider2D:
   m_ObjectHideFlags: 0

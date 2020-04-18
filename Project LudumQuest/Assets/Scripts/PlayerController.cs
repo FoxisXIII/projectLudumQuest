@@ -19,7 +19,8 @@ public class PlayerController : MonoBehaviour
     private float rotation;
     private Rigidbody2D _rigidbody;
 
-    private float ink;
+    public float ink;
+    public GameObject prefabink;
     [SerializeField] private float maxInk;
 
     [SerializeField] private Material inkMaterial;
@@ -65,6 +66,8 @@ public class PlayerController : MonoBehaviour
             (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x)) && rotation == 180)
             if (enemy.TakeDamage(damage))
             {
+                
+                Instantiate(prefabink,enemy.transform.position+new Vector3(2,0,0),Quaternion.identity);
                 Destroy(enemy.gameObject);
             }
     }
