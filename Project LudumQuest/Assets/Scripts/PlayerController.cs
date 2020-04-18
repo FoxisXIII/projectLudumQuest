@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float inkSpeed;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         GameController.getInstance().PlayerController = this;
         ink = maxInk;
