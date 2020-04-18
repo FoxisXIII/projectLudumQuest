@@ -190,6 +190,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1855699923, guid: 2a4370481c51c1844bef463207229d7c, type: 3}
+      propertyPath: pointP1
+      value: 
+      objectReference: {fileID: 1516603329}
+    - target: {fileID: 1855699923, guid: 2a4370481c51c1844bef463207229d7c, type: 3}
+      propertyPath: pointP2
+      value: 
+      objectReference: {fileID: 124005893}
+    - target: {fileID: 1855699923, guid: 2a4370481c51c1844bef463207229d7c, type: 3}
+      propertyPath: Player
+      value: 
+      objectReference: {fileID: 1951741791}
     - target: {fileID: 1904801890539798305, guid: 2a4370481c51c1844bef463207229d7c,
         type: 3}
       propertyPath: m_Name
@@ -252,31 +264,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a4370481c51c1844bef463207229d7c, type: 3}
---- !u!1 &1855699922 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1904801890539798305, guid: 2a4370481c51c1844bef463207229d7c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1855699921}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1855699923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1855699922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9439dd1cc55a26745ab63bf61e5e5b20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ActualP: 0
-  rangeChase: 5
-  rangetoAttack: 5
-  speed: 1
-  pointP1: {fileID: 1516603329}
-  pointP2: {fileID: 124005893}
-  Player: {fileID: 1951741791}
 --- !u!1 &1864073208
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,7 +363,7 @@ PrefabInstance:
     - target: {fileID: 8949800912245874840, guid: 14871f2cde7cc3347915e03bd8aefbd5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.77
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8949800912245874840, guid: 14871f2cde7cc3347915e03bd8aefbd5,
         type: 3}
@@ -432,6 +419,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 9033088595117688125, guid: 14871f2cde7cc3347915e03bd8aefbd5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14871f2cde7cc3347915e03bd8aefbd5, type: 3}

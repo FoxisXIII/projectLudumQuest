@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     public float rangetoAttack = 1f;
     public float speed = 0.2f;
     public GameObject pointP1, pointP2, Player;
+    public float attackRate;
     
     
     // Start is called before the first frame update
@@ -24,19 +25,9 @@ public class Enemy : MonoBehaviour
         Status.UpdateState();
     }
 
-    public void SetState(Chase statusnew)
+    public void SetState(InterfaceIA statusnew)
     {
         Status = statusnew;
     }
-    
-    public void SetState(Patrol statusnew)
-    {
-        Status = statusnew;
-    }
-    
-    public void SetState(Attack statusnew)
-    {
-        Status = statusnew;
-    }
-    
+
 }
