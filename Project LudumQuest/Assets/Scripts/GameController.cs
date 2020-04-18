@@ -7,6 +7,7 @@ public class GameController
     private static GameController instance;
 
     public PlayerController PlayerController;
+    public Material InkMaterial;
 
     private GameController()
     {

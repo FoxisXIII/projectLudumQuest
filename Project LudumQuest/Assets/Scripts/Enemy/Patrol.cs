@@ -21,8 +21,7 @@ public class Patrol : InterfaceIA
          {
              init(Enemigo);
              Yo = Enemigo;
-             Debug.Log("Esto Patrulla");
-             
+           
          }
 
     public void UpdateState()
@@ -59,7 +58,6 @@ public class Patrol : InterfaceIA
         
         if (SeePlayer())
         {
-            Debug.Log("Cambio a CHase");
             Yo.SetState(new Chase(Yo));
         }
 
@@ -69,7 +67,7 @@ public class Patrol : InterfaceIA
     {
         bool ret=false;
 
-        if (Vector2.Distance(Yo.transform.position, Yo.Player.transform.position) <= Yo.rangeChase)
+        if (Vector2.Distance(Yo.transform.position, GameController.getInstance().PlayerController.transform.position) <= Yo.rangeChase)
         {
             ret = true;
         }

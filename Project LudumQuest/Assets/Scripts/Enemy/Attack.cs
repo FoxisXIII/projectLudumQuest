@@ -18,7 +18,6 @@ public class Attack : InterfaceIA
     {
         init(Enemigo);
         Yo = Enemigo;
-        //Debug.Log("Esto Chase");
     }
 
     public void UpdateState()
@@ -26,12 +25,11 @@ public class Attack : InterfaceIA
         time += Time.deltaTime;
         if (time >= Yo.attackRate)
         {
-            Yo.Player.transform.position.Normalize(); //DEBERIA ATACAR AQUI
-            Debug.Log("Atacando");
+            GameController.getInstance().PlayerController.TakeDamage(Yo.attack);
             time = 0;
         }
 
-        if (Vector2.Distance(Yo.transform.position, Yo.Player.transform.position) >= Yo.rangetoAttack)
+        if (Vector2.Distance(Yo.transform.position, GameController.getInstance().PlayerController.transform.position) >= Yo.rangetoAttack)
             Yo.SetState(new Chase(Yo));
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,26 +26,68 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float inkSpeed;
 
+
+    public TextMeshProUGUI inkLevelTextUI;
+    public Image inkLevelImageUI;
+    public TextMeshProUGUI inkSpeedUI;
+
+    public float damage;
+    private Enemy enemy;
+
     // Start is called before the first frame update
     void Awake()
     {
         GameController.getInstance().PlayerController = this;
         ink = maxInk;
         _rigidbody = GetComponent<Rigidbody2D>();
+        GameController.getInstance().InkMaterial = inkMaterial;
+        inkMaterial = Instantiate<Material>(GameController.getInstance().InkMaterial);
+
+        foreach (var child in transform.GetComponentsInChildren<SpriteRenderer>())
+        {
+            child.material = inkMaterial;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         Movement();
+        Ink();
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+            AttackEnemies();
+    }
+
+    private void AttackEnemies()
+    {
+        print("Attack");
+        if ((Mathf.Abs(enemy.transform.position.x) > Mathf.Abs(transform.position.x)) && rotation == 0 ||
+            (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x)) && rotation == 180)
+            if (enemy.TakeDamage(damage))
+            {
+                Destroy(enemy.gameObject);
+            }
+    }
+
+    private void Ink()
+    {
         ink -= Mathf.Max(inkSpeed * Time.deltaTime, 0);
         if (ink <= 0)
         {
             Destroy(gameObject);
         }
 
-        inkMaterial.SetFloat("_Fade", ink);
-        print(ink);
+        inkLevelImageUI.fillAmount = ink;
+        inkLevelTextUI.text = (int) (ink * 100) + "%";
+        inkSpeedUI.text = "x" + inkSpeed * 100;
+
+
+        inkMaterial.SetFloat("_Fade", ink / 2);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        inkSpeed *= damage;
     }
 
     private void Movement()
@@ -132,6 +176,26 @@ public class PlayerController : MonoBehaviour
                 break;
             case "Pushable":
                 inGround = false;
+                break;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        switch (other.gameObject.tag)
+        {
+            case "Enemy":
+                enemy = other.GetComponent<Enemy>();
+                break;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        switch (other.gameObject.tag)
+        {
+            case "Enemy":
+                enemy = null;
                 break;
         }
     }
