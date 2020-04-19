@@ -8,6 +8,7 @@ public class GameController
 
     public PlayerController PlayerController;
     public Material InkMaterial;
+    public LevelManager LevelManager;
 
     private GameController()
     {

@@ -1263,6 +1263,7 @@ GameObject:
   - component: {fileID: 541372668}
   - component: {fileID: 4232605277256679867}
   - component: {fileID: 1023556134}
+  - component: {fileID: 1683358878}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1322,7 +1323,7 @@ Rigidbody2D:
   m_Mass: 0.96384037
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 5
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 2
   m_SleepingMode: 1
@@ -1341,15 +1342,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 250
-  jumpSpeed: 12.5
+  jumpSpeed: 15
   rotationSpeed: 2
+  ink: 0
+  prefabink: {fileID: 0}
   maxInk: 1
   inkMaterial: {fileID: 2100000, guid: bc4dbbbfb49ec7e459b85c85ca820401, type: 2}
   inkSpeed: 0.01
   inkLevelTextUI: {fileID: 0}
   inkLevelImageUI: {fileID: 0}
   inkSpeedUI: {fileID: 0}
-  damage: 0
+  damage: 0.25
 --- !u!58 &1023556134
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1366,3 +1369,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 5}
   serializedVersion: 2
   m_Radius: 5
+--- !u!95 &1683358878
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9033088595117688125}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a98360252a542a34382472d80d88ca68, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

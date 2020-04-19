@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
 
     private Material inkMaterial;
     public float attack;
+    public GameObject prefabink;
 
 
     // Start is called before the first frame update
@@ -41,12 +42,16 @@ public class Enemy : MonoBehaviour
         Status = statusnew;
     }
 
-    public bool TakeDamage(float damage)
+    public void TakeDamage(float damage)
     {
         inkLevel.fillAmount = Mathf.Max(inkLevel.fillAmount - damage, 0);
 
         inkMaterial.SetFloat("_Fade", inkLevel.fillAmount / 2);
 
-        return inkLevel.fillAmount <= 0;
+        if (inkLevel.fillAmount <= 0)
+        {
+            Instantiate(prefabink, transform).transform.parent=null;
+            Destroy(gameObject);
+        }
     }
 }
