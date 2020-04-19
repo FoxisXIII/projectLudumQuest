@@ -47,9 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 925c8cf399871d246ae4136a589495ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abierta: 0
   speed: 1
-  posPressed: {x: 0, y: 0}
+  interactuable: []
+  byEnemy: 0
+  enemy: {fileID: 0}
 --- !u!61 &65555725868287574
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -87,7 +88,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -2106753311485234791, guid: 61d1ea08a2c560b4e9657108a99d6fc9,
+      objectReference: {fileID: -8686373658521615208, guid: 61d1ea08a2c560b4e9657108a99d6fc9,
         type: 3}
     - target: {fileID: -6553548309521869934, guid: b9816f9069e78054fb7eb8d3feb37e73,
         type: 3}
@@ -195,7 +196,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 4564416947644555815, guid: 61d1ea08a2c560b4e9657108a99d6fc9,
+      objectReference: {fileID: -7266007344547914704, guid: 61d1ea08a2c560b4e9657108a99d6fc9,
         type: 3}
     - target: {fileID: -6553548309521869934, guid: b9816f9069e78054fb7eb8d3feb37e73,
         type: 3}
@@ -358,7 +359,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1503505147553615786, guid: 61d1ea08a2c560b4e9657108a99d6fc9,
+      objectReference: {fileID: 7523419064819043631, guid: 61d1ea08a2c560b4e9657108a99d6fc9,
         type: 3}
     - target: {fileID: -6553548309521869934, guid: b9816f9069e78054fb7eb8d3feb37e73,
         type: 3}

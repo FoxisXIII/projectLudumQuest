@@ -192,11 +192,6 @@ public class PlayerController : MonoBehaviour
             case "Floor":
                 inGround = true;
                 break;
-            case "Ladder":
-                _rigidbody.gravityScale = 0;
-                climbLadder = true;
-                inGround = false;
-                break;
         }
     }
 
@@ -227,10 +222,6 @@ public class PlayerController : MonoBehaviour
             case "Floor":
                 inGround = false;
                 break;
-            case "Ladder":
-                _rigidbody.gravityScale = 5;
-                climbLadder = false;
-                break;
             case "Pushable":
                 inGround = false;
                 push = false;
@@ -248,6 +239,11 @@ public class PlayerController : MonoBehaviour
             case "Victory":
                 GameController.getInstance().LevelManager.Victory();
                 break;
+            case "Ladder":
+                _rigidbody.gravityScale = 0;
+                climbLadder = true;
+                inGround = false;
+                break;
         }
     }
 
@@ -257,6 +253,10 @@ public class PlayerController : MonoBehaviour
         {
             case "Enemy":
                 enemy = null;
+                break;
+            case "Ladder":
+                _rigidbody.gravityScale = 5;
+                climbLadder = false;
                 break;
         }
     }

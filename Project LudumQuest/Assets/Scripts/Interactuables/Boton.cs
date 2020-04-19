@@ -3,36 +3,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boton : IInteractuable
+public class Boton : Interactuable
 {
     private bool pressed;
 
     public AudioSource AudioSource;
-    
-    // Update is called once per frame
-    void Update()
-    {
-    }
+
+    public bool hasToActivate;
+    public Interactuable activateThis;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.isTrigger)
-        {
-            AudioSource.Play();
-        }
+        if (!other.CompareTag("Floor") && !other.CompareTag("Ladder"))
+            if (!hasToActivate || hasToActivate && activateThis.On())
+            {
+                if (!other.isTrigger && other.CompareTag("Player"))
+                {
+                    AudioSource.Play();
+                }
+            }
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        pressed = true;
-        transform.GetChild(0).gameObject.SetActive(false);
-        transform.GetChild(1).gameObject.SetActive(true);
+        if (!other.CompareTag("Floor") && !other.CompareTag("Ladder"))
+            if (!hasToActivate || hasToActivate && activateThis.On())
+            {
+                if (!other.isTrigger&&other.CompareTag("Player"))
+                {
+                    pressed = true;
+                    transform.GetChild(0).gameObject.SetActive(false);
+                    transform.GetChild(1).gameObject.SetActive(true);
+                }
+            }
     }
+
     private void OnTriggerExit2D(Collider2D other)
     {
-        pressed = false;
-        transform.GetChild(0).gameObject.SetActive(true);
-        transform.GetChild(1).gameObject.SetActive(false);
+        if (!other.CompareTag("Floor") && !other.CompareTag("Ladder"))
+            if (!hasToActivate || hasToActivate && activateThis.On())
+            {
+                if (!other.isTrigger&&other.CompareTag("Player"))
+                {
+                    pressed = false;
+                    transform.GetChild(0).gameObject.SetActive(true);
+                    transform.GetChild(1).gameObject.SetActive(false);
+                }
+            }
     }
 
     public override bool On()
