@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -38,6 +39,8 @@ public class PlayerController : MonoBehaviour
 
     private Animator _animator;
     private bool jump;
+    private bool push;
+    private int pushPos;
 
     // Start is called before the first frame update
     void Awake()
@@ -110,6 +113,9 @@ public class PlayerController : MonoBehaviour
                 {
                     movement.x = speed * Time.deltaTime;
                     rotation = 0;
+                    if(push&&pushPos>0)
+                        _animator.SetBool("PUSH", true);
+                    else
                     _animator.SetBool("WALK", true);
                 }
 
@@ -117,11 +123,15 @@ public class PlayerController : MonoBehaviour
                 {
                     movement.x = -speed * Time.deltaTime;
                     rotation = 180;
+                    if(push&&pushPos<0)
+                        _animator.SetBool("PUSH", true);
+                    else
                     _animator.SetBool("WALK", true);
                 }
 
                 if (movement.x == 0)
                 {
+                    _animator.SetBool("PUSH", false);
                     _animator.SetBool("WALK", false);
                     _animator.SetBool("IDLE", true);
                 }
@@ -195,8 +205,12 @@ public class PlayerController : MonoBehaviour
         switch (other.gameObject.tag)
         {
             case "Pushable":
+                push = true;
                 if (transform.position.y <= other.transform.position.y)
+                {
                     other.rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
+                    pushPos = Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) ? 1 : -1;
+                }
                 else
                 {
                     inGround = true;
@@ -219,6 +233,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case "Pushable":
                 inGround = false;
+                push = false;
                 break;
         }
     }
