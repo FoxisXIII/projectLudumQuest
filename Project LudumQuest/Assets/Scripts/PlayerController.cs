@@ -42,6 +42,10 @@ public class PlayerController : MonoBehaviour
     private bool push;
     private int pushPos;
 
+    public AudioClip[] sounds;
+
+    private AudioSource _audioSource;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -58,6 +62,8 @@ public class PlayerController : MonoBehaviour
         }
 
         _animator = GetComponent<Animator>();
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -91,8 +97,8 @@ public class PlayerController : MonoBehaviour
         inkLevelImageUI.fillAmount = ink;
         inkLevelTextUI.text = (int) (ink * 100) + "%";
         inkSpeedUI.text = "x" + (inkSpeed * 100).ToString("F2");
-        if(inkSpeed * 100>3)inkSpeedUI.color=Color.red;
-        else inkSpeedUI.color=Color.black;
+        if (inkSpeed * 100 > 3) inkSpeedUI.color = Color.red;
+        else inkSpeedUI.color = Color.black;
 
 
         inkMaterial.SetFloat("_Fade", ink / 2);
@@ -244,7 +250,7 @@ public class PlayerController : MonoBehaviour
             case "Ladder":
                 _rigidbody.gravityScale = 0;
                 climbLadder = true;
-                inGround = false;
+                inGround = true;
                 break;
         }
     }
@@ -259,6 +265,7 @@ public class PlayerController : MonoBehaviour
             case "Ladder":
                 _rigidbody.gravityScale = 5;
                 climbLadder = false;
+                inGround = false;
                 break;
         }
     }
@@ -266,12 +273,18 @@ public class PlayerController : MonoBehaviour
     public void Jump()
     {
         if (!jump)
+        {
             jump = true;
+            _audioSource.clip = sounds[2];
+            _audioSource.Play();
+        }
     }
 
     public void StopJump()
     {
         _animator.SetBool("JUMP", false);
+        _audioSource.clip = sounds[3];
+        _audioSource.Play();
     }
 
     public void Attack()
@@ -279,7 +292,11 @@ public class PlayerController : MonoBehaviour
         if (enemy != null &&
             ((Mathf.Abs(enemy.transform.position.x) > Mathf.Abs(transform.position.x) && rotation == 0) ||
              (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x) && rotation == 180)))
+        {
+            _audioSource.clip = sounds[5];
+            _audioSource.Play();
             enemy.TakeDamage(damage);
+        }
     }
 
     public void RandomAttack()
@@ -287,5 +304,29 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("ATTACK", false);
         _animator.SetBool("IDLE", true);
         _animator.SetFloat("ATTACK_COMBOS", Random.Range(1, 4));
+    }
+
+    public void PlayFootstep1()
+    {
+        _audioSource.clip = sounds[0];
+        _audioSource.Play();
+    }
+
+    public void PlayFootstep2()
+    {
+        _audioSource.clip = sounds[1];
+        _audioSource.Play();
+    }
+
+    public void PlayLadderstep()
+    {
+        _audioSource.clip = sounds[4];
+        _audioSource.Play();
+    }
+
+    public void PlayPush()
+    {
+        _audioSource.clip = sounds[6];
+        _audioSource.Play();
     }
 }

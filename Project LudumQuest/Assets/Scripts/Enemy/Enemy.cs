@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public float rangeChase = 5f;
     public float rangetoAttack = 1f;
     public float speed = 0.2f;
-    public GameObject leftPoint, rightPoint;
+    [HideInInspector] public Vector2 leftPoint, rightPoint;
     public float attackRate;
     private float inkLevel = 1;
 
@@ -22,11 +22,15 @@ public class Enemy : MonoBehaviour
 
     [HideInInspector] public Animator _animator;
     public float rotation;
+    private AudioSource _audioSource;
+    public AudioClip[] sounds;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        leftPoint = new Vector2(transform.position.x - 5, transform.position.y);
+        rightPoint = new Vector2(transform.position.x + 5, transform.position.y);
         _animator = GetComponent<Animator>();
         Status = new Patrol(this);
         inkMaterial = Instantiate<Material>(GameController.getInstance().InkMaterial);
@@ -35,6 +39,8 @@ public class Enemy : MonoBehaviour
         {
             child.material = inkMaterial;
         }
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -64,6 +70,8 @@ public class Enemy : MonoBehaviour
 
     public void Attack()
     {
+        _audioSource.clip = sounds[5];
+        _audioSource.Play();
         GameController.getInstance().PlayerController.TakeDamage(attack);
     }
 
@@ -71,5 +79,29 @@ public class Enemy : MonoBehaviour
     {
         _animator.SetBool("ATTACK", false);
         _animator.SetFloat("ATTACK_COMBOS", Random.Range(1, 4));
+    }
+
+    public void PlayFootstep1()
+    {
+        _audioSource.clip = sounds[0];
+        _audioSource.Play();
+    }
+
+    public void PlayFootstep2()
+    {
+        _audioSource.clip = sounds[1];
+        _audioSource.Play();
+    }
+
+    public void PlayLadderstep()
+    {
+        _audioSource.clip = sounds[4];
+        _audioSource.Play();
+    }
+
+    public void PlayPush()
+    {
+        _audioSource.clip = sounds[6];
+        _audioSource.Play();
     }
 }
