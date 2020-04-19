@@ -4,76 +4,76 @@ using UnityEditor;
 using UnityEngine;
 
 public class Patrol : InterfaceIA
-     {
-         
-         
-     
-         private Enemy Yo; 
-         
-         public InterfaceIA init(Enemy Enemigo)
-         {
-             Yo = Enemigo;
-             
-             return this;
-         }
-         
-         public Patrol(Enemy Enemigo)
-         {
-             init(Enemigo);
-             Yo = Enemigo;
-           
-         }
+{
+    private float rotation;
+
+    private Enemy Yo;
+
+    public InterfaceIA init(Enemy Enemigo)
+    {
+        Yo = Enemigo;
+
+        return this;
+    }
+
+    public Patrol(Enemy Enemigo)
+    {
+        init(Enemigo);
+        Yo = Enemigo;
+
+        Yo._animator.SetBool("WALK", true);
+    }
 
     public void UpdateState()
     {
-        
-
-        
-        if (Yo.pointP1.transform.position.x <= Yo.transform.position.x)
+        if (Yo.leftPoint.transform.position.x <= Yo.transform.position.x)
         {
-            //Debug.Log("Change to P2");
+            rotation = 180;
             Yo.ActualP = 1;
         }
-        if (Yo.pointP2.transform.position.x >= Yo.transform.position.x)
+
+        if (Yo.rightPoint.transform.position.x >= Yo.transform.position.x)
         {
-            //Debug.Log("Change to P1");
+            rotation = 0;
             Yo.ActualP = 0;
         }
+
+        Yo.transform.rotation = Quaternion.Lerp(Yo.transform.rotation, Quaternion.Euler(0, rotation, 0),
+            2 * Time.deltaTime);
         
-        if (Yo.ActualP==0)
+        if (Yo.ActualP == 0)
         {
             //Debug.Log("Move to P1");
             Vector2 newP;
-            newP = Vector2.MoveTowards(Yo.transform.position, Yo.pointP1.transform.position, Yo.speed*Time.deltaTime);
-            newP=new Vector2(newP.x,Yo.transform.position.y);
-            Yo.transform.position=newP;
-        }else if (Yo.ActualP==1)
-        {
-           // Debug.Log("Move to P2");
-            Vector2 newP;
-            newP = Vector2.MoveTowards(Yo.transform.position, Yo.pointP2.transform.position, Yo.speed*Time.deltaTime);
-            newP=new Vector2(newP.x,Yo.transform.position.y);
-            Yo.transform.position=newP;
+            newP = Vector2.MoveTowards(Yo.transform.position, Yo.leftPoint.transform.position, Yo.speed * Time.deltaTime);
+            newP = new Vector2(newP.x, Yo.transform.position.y);
+            Yo.transform.position = newP;
         }
-        
+        else if (Yo.ActualP == 1)
+        {
+            // Debug.Log("Move to P2");
+            Vector2 newP;
+            newP = Vector2.MoveTowards(Yo.transform.position, Yo.rightPoint.transform.position, Yo.speed * Time.deltaTime);
+            newP = new Vector2(newP.x, Yo.transform.position.y);
+            Yo.transform.position = newP;
+        }
+
         if (SeePlayer())
         {
             Yo.SetState(new Chase(Yo));
         }
-
     }
 
     bool SeePlayer()
     {
-        bool ret=false;
+        bool ret = false;
 
-        if (Vector2.Distance(Yo.transform.position, GameController.getInstance().PlayerController.transform.position) <= Yo.rangeChase)
+        if (Vector2.Distance(Yo.transform.position, GameController.getInstance().PlayerController.transform.position) <=
+            Yo.rangeChase)
         {
             ret = true;
         }
-        
+
         return ret;
     }
-
-   
 }

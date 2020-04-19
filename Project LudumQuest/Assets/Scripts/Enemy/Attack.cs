@@ -18,6 +18,8 @@ public class Attack : InterfaceIA
     {
         init(Enemigo);
         Yo = Enemigo;
+        Yo._animator.SetBool("WALK", false);
+        Yo._animator.SetBool("ATTACK", true);
     }
 
     public void UpdateState()
@@ -25,7 +27,7 @@ public class Attack : InterfaceIA
         time += Time.deltaTime;
         if (time >= Yo.attackRate)
         {
-            GameController.getInstance().PlayerController.TakeDamage(Yo.attack);
+            Yo._animator.SetBool("ATTACK", true);
             time = 0;
         }
 

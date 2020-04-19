@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class PlayerController : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Material inkMaterial;
 
-    [SerializeField] private float inkSpeed;
+    public float inkSpeed;
 
 
     public TextMeshProUGUI inkLevelTextUI;
@@ -34,6 +35,9 @@ public class PlayerController : MonoBehaviour
 
     public float damage;
     private Enemy enemy;
+
+    private Animator _animator;
+    private bool jump;
 
     // Start is called before the first frame update
     void Awake()
@@ -46,30 +50,31 @@ public class PlayerController : MonoBehaviour
 
         foreach (var child in transform.GetComponentsInChildren<SpriteRenderer>())
         {
+            if (child.material.name.Equals(inkMaterial.name))
             child.material = inkMaterial;
         }
+
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Movement();
+        if (ink > 0)
+        {
+            Movement();
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+                AttackEnemies();
+        }
+
         Ink();
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-            AttackEnemies();
     }
 
     private void AttackEnemies()
     {
-        print("Attack");
-        if ((Mathf.Abs(enemy.transform.position.x) > Mathf.Abs(transform.position.x)) && rotation == 0 ||
-            (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x)) && rotation == 180)
-            if (enemy.TakeDamage(damage))
-            {
-                
-                Instantiate(prefabink,enemy.transform.position+new Vector3(2,0,0),Quaternion.identity);
-                Destroy(enemy.gameObject);
-            }
+        if (!_animator.GetBool("JUMP"))
+            _animator.SetBool("ATTACK", true);
     }
 
     private void Ink()
@@ -77,12 +82,12 @@ public class PlayerController : MonoBehaviour
         ink -= Mathf.Max(inkSpeed * Time.deltaTime, 0);
         if (ink <= 0)
         {
-            Destroy(gameObject);
+            GameController.getInstance().LevelManager.Defeat();
         }
 
         inkLevelImageUI.fillAmount = ink;
         inkLevelTextUI.text = (int) (ink * 100) + "%";
-        inkSpeedUI.text = "x" + inkSpeed * 100;
+        inkSpeedUI.text = "x" + (inkSpeed * 100).ToString("F2");
 
 
         inkMaterial.SetFloat("_Fade", ink / 2);
@@ -90,45 +95,80 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        inkSpeed *= damage;
+        _animator.SetTrigger("TAKE_DAMAGE");
+        inkSpeed = Mathf.Min(inkSpeed + damage, 0.05f);
     }
 
     private void Movement()
     {
         Vector2 movement = new Vector2();
-        if (Input.GetKey(KeyCode.D))
+        if (!_animator.GetBool("ATTACK"))
         {
-            movement.x = speed * Time.deltaTime;
-            rotation = 0;
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            movement.x = -speed * Time.deltaTime;
-            rotation = 180;
-        }
-
-
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, rotation, 0),
-            rotationSpeed * Time.deltaTime);
-
-        movement.y = _rigidbody.velocity.y;
-        if (inGround && !climbLadder && Input.GetKey(KeyCode.Space))
-        {
-            movement.y = jumpSpeed;
-        }
-
-        if (climbLadder)
-        {
-            movement.y = 0;
-            if (Input.GetKey(KeyCode.W))
+            if (!_animator.GetBool("JUMP")||!inGround)
             {
-                movement.y = speed * Time.deltaTime;
+                if (Input.GetKey(KeyCode.D))
+                {
+                    movement.x = speed * Time.deltaTime;
+                    rotation = 0;
+                    _animator.SetBool("WALK", true);
+                }
+
+                if (Input.GetKey(KeyCode.A))
+                {
+                    movement.x = -speed * Time.deltaTime;
+                    rotation = 180;
+                    _animator.SetBool("WALK", true);
+                }
+
+                if (movement.x == 0)
+                {
+                    _animator.SetBool("WALK", false);
+                    _animator.SetBool("IDLE", true);
+                }
+                
+            }
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, rotation, 0),
+                rotationSpeed * Time.deltaTime);
+            
+            movement.y = _rigidbody.velocity.y;
+            if (inGround && !climbLadder && Input.GetKey(KeyCode.Space))
+            {
+                _animator.SetBool("WALK", false);
+                _animator.SetBool("JUMP",true);
+            }
+            else if (!inGround)
+            {
+                _animator.SetBool("FALL", true);
+            }
+            else
+            {
+                _animator.SetBool("FALL", false);
+                _animator.SetBool("IDLE", true);
             }
 
-            if (Input.GetKey(KeyCode.S))
+            if (jump)
             {
-                movement.y = -speed * Time.deltaTime;
+                movement.y = jumpSpeed;
+                jump = false;
+            }
+            
+            if (climbLadder)
+            {
+                _animator.SetBool("CLIMB_LADDER", true);
+                movement.y = 0;
+                if (Input.GetKey(KeyCode.W))
+                {
+                    movement.y = speed * Time.deltaTime;
+                }
+
+                if (Input.GetKey(KeyCode.S))
+                {
+                    movement.y = -speed * Time.deltaTime;
+                }
+            }
+            else
+            {
+                _animator.SetBool("CLIMB_LADDER", false);
             }
         }
 
@@ -190,6 +230,9 @@ public class PlayerController : MonoBehaviour
             case "Enemy":
                 enemy = other.GetComponent<Enemy>();
                 break;
+            case "Victory":
+                GameController.getInstance().LevelManager.Victory();
+                break;
         }
     }
 
@@ -201,5 +244,33 @@ public class PlayerController : MonoBehaviour
                 enemy = null;
                 break;
         }
+    }
+
+    public void Jump()
+    {
+        if (!jump)
+            jump = true;
+    }
+    
+    public void StopJump()
+    {
+        _animator.SetBool("JUMP", false);
+    }
+
+    public void Attack()
+    {
+        if (enemy != null && ((Mathf.Abs(enemy.transform.position.x) > Mathf.Abs(transform.position.x)) &&
+                              rotation == 0 ||
+                              (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x)) &&
+                              rotation == 180))
+
+            enemy.TakeDamage(damage);
+    }
+
+    public void RandomAttack()
+    {
+        _animator.SetBool("ATTACK", false);
+        _animator.SetBool("IDLE", true);
+        _animator.SetFloat("ATTACK_COMBOS", Random.Range(1, 4));
     }
 }
