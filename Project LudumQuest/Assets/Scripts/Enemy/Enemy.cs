@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
 {
@@ -12,13 +14,14 @@ public class Enemy : MonoBehaviour
     public float speed = 0.2f;
     public GameObject leftPoint, rightPoint;
     public float attackRate;
-    public Image inkLevel;
+    private float inkLevel = 1;
 
     private Material inkMaterial;
     public float attack;
     public GameObject prefabink;
 
     [HideInInspector] public Animator _animator;
+    public float rotation;
 
 
     // Start is called before the first frame update
@@ -30,8 +33,7 @@ public class Enemy : MonoBehaviour
         inkMaterial.SetFloat("_Fade", .5f);
         foreach (var child in transform.GetComponentsInChildren<SpriteRenderer>())
         {
-            if (child.material.name.Equals(inkMaterial.name))
-                child.material = inkMaterial;
+            child.material = inkMaterial;
         }
     }
 
@@ -49,13 +51,13 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _animator.SetTrigger("TAKE_DAMAGE");
-        inkLevel.fillAmount = Mathf.Max(inkLevel.fillAmount - damage, 0);
+        inkLevel = Mathf.Max(inkLevel - damage, 0);
 
-        inkMaterial.SetFloat("_Fade", inkLevel.fillAmount / 2);
+        inkMaterial.SetFloat("_Fade", inkLevel / 2);
 
-        if (inkLevel.fillAmount <= 0)
+        if (inkLevel <= 0.15f)
         {
-            Instantiate(prefabink, transform).transform.parent = null;
+            Instantiate(prefabink, transform.position + Vector3.up / 2, quaternion.identity).transform.parent = null;
             Destroy(gameObject);
         }
     }
