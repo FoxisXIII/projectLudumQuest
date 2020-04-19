@@ -47,7 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  interactuable: {fileID: 0}
+  interactuable: []
+  byEnemy: 0
+  enemy: {fileID: 0}
 --- !u!61 &2012614120146813658
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -85,7 +87,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -7114055807923546517, guid: 61d1ea08a2c560b4e9657108a99d6fc9,
+      objectReference: {fileID: 6014495719360825531, guid: 61d1ea08a2c560b4e9657108a99d6fc9,
         type: 3}
     - target: {fileID: -6553548309521869934, guid: b9816f9069e78054fb7eb8d3feb37e73,
         type: 3}
@@ -198,7 +200,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 8904476833805070984, guid: 61d1ea08a2c560b4e9657108a99d6fc9,
+      objectReference: {fileID: 1503505147553615786, guid: 61d1ea08a2c560b4e9657108a99d6fc9,
         type: 3}
     - target: {fileID: -6553548309521869934, guid: b9816f9069e78054fb7eb8d3feb37e73,
         type: 3}
