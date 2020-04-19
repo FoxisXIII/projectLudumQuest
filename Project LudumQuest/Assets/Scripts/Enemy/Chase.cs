@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Chase : InterfaceIA
 {
-    private float rotation;
 
     private Enemy Yo;
 
@@ -33,12 +33,12 @@ public class Chase : InterfaceIA
 
         if (Mathf.Abs(Yo.transform.position.x) >
             Mathf.Abs(GameController.getInstance().PlayerController.transform.position.x))
-            rotation = 180;
+            Yo.rotation = 180;
         if (Mathf.Abs(Yo.transform.position.x) <
             Mathf.Abs(GameController.getInstance().PlayerController.transform.position.x))
-            rotation = 0;
+            Yo.rotation = 0;
 
-        Yo.transform.rotation = Quaternion.Lerp(Yo.transform.rotation, Quaternion.Euler(0, rotation, 0),
+        Yo.transform.rotation = Quaternion.Lerp(Yo.transform.rotation, Quaternion.Euler(0, Yo.rotation, 0),
             2 * Time.deltaTime);
 
         if (CanAttack())
@@ -63,6 +63,6 @@ public class Chase : InterfaceIA
     bool CanAttack()
     {
         return Vector2.Distance(Yo.transform.position,
-            GameController.getInstance().PlayerController.transform.position) <= Yo.rangetoAttack;
+                   GameController.getInstance().PlayerController.transform.position) <= Yo.rangetoAttack;
     }
 }
