@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (var child in transform.GetComponentsInChildren<SpriteRenderer>())
         {
+            if (child.material.name.Equals(inkMaterial.name))
             child.material = inkMaterial;
         }
 
@@ -94,8 +95,8 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        _animator.SetTrigger("TAKE_DAMAGE");
         inkSpeed = Mathf.Min(inkSpeed + damage, 0.05f);
-        _rigidbody.velocity = new Vector2(-50, _rigidbody.velocity.y);
     }
 
     private void Movement()
@@ -103,35 +104,37 @@ public class PlayerController : MonoBehaviour
         Vector2 movement = new Vector2();
         if (!_animator.GetBool("ATTACK"))
         {
-            if (Input.GetKey(KeyCode.D))
+            if (!_animator.GetBool("JUMP")||!inGround)
             {
-                movement.x = speed * Time.deltaTime;
-                rotation = 0;
-                _animator.SetBool("WALK", true);
+                if (Input.GetKey(KeyCode.D))
+                {
+                    movement.x = speed * Time.deltaTime;
+                    rotation = 0;
+                    _animator.SetBool("WALK", true);
+                }
+
+                if (Input.GetKey(KeyCode.A))
+                {
+                    movement.x = -speed * Time.deltaTime;
+                    rotation = 180;
+                    _animator.SetBool("WALK", true);
+                }
+
+                if (movement.x == 0)
+                {
+                    _animator.SetBool("WALK", false);
+                    _animator.SetBool("IDLE", true);
+                }
+                
             }
-
-            if (Input.GetKey(KeyCode.A))
-            {
-                movement.x = -speed * Time.deltaTime;
-                rotation = 180;
-                _animator.SetBool("WALK", true);
-            }
-
-            if (movement.x == 0)
-            {
-                _animator.SetBool("WALK", false);
-                _animator.SetBool("IDLE", true);
-            }
-
-
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, rotation, 0),
                 rotationSpeed * Time.deltaTime);
-
+            
             movement.y = _rigidbody.velocity.y;
             if (inGround && !climbLadder && Input.GetKey(KeyCode.Space))
             {
                 _animator.SetBool("WALK", false);
-                _animator.SetTrigger("JUMP");
+                _animator.SetBool("JUMP",true);
             }
             else if (!inGround)
             {
@@ -148,7 +151,7 @@ public class PlayerController : MonoBehaviour
                 movement.y = jumpSpeed;
                 jump = false;
             }
-
+            
             if (climbLadder)
             {
                 _animator.SetBool("CLIMB_LADDER", true);
