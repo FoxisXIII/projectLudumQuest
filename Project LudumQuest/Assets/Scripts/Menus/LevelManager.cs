@@ -14,10 +14,12 @@ public class LevelManager : MonoBehaviour
     public AudioClip restartClip;
     public AudioClip victoryClip;
     public AudioClip defeatClip;
+    public AudioClip backgroundClip;
 
     private void Awake()
     {
         GameController.getInstance().LevelManager = this;
+        FindObjectOfType<AudioManager>().PlayMusic(backgroundClip);
     }
 
     public void PauseGame()

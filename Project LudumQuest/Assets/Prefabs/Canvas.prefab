@@ -3215,8 +3215,9 @@ MonoBehaviour:
   audioSource: {fileID: 6686367407166683182}
   pauseClip: {fileID: 8300000, guid: c713373b4d65e364893bf9171b2ac72a, type: 3}
   restartClip: {fileID: 8300000, guid: 2d577476ca2b071438c261a3b2889bbd, type: 3}
-  victoryClip: {fileID: 0}
-  defeatClip: {fileID: 0}
+  victoryClip: {fileID: 8300000, guid: d92440ac507ddab4896c5ad609c21d42, type: 3}
+  defeatClip: {fileID: 8300000, guid: 08f05425f13e674498b2ddcc0f0d4c57, type: 3}
+  backgroundClip: {fileID: 8300000, guid: a059c01d06949ce43824164b9494e06e, type: 3}
 --- !u!82 &6686367407166683182
 AudioSource:
   m_ObjectHideFlags: 0
