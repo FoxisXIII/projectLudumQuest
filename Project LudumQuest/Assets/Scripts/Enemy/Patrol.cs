@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Patrol : InterfaceIA
 {
-    private float rotation;
-
     private Enemy Yo;
 
     public InterfaceIA init(Enemy Enemigo)
@@ -28,24 +26,25 @@ public class Patrol : InterfaceIA
     {
         if (Yo.leftPoint.transform.position.x <= Yo.transform.position.x)
         {
-            rotation = 180;
+            Yo.rotation = 180;
             Yo.ActualP = 1;
         }
 
         if (Yo.rightPoint.transform.position.x >= Yo.transform.position.x)
         {
-            rotation = 0;
+            Yo.rotation = 0;
             Yo.ActualP = 0;
         }
 
-        Yo.transform.rotation = Quaternion.Lerp(Yo.transform.rotation, Quaternion.Euler(0, rotation, 0),
+        Yo.transform.rotation = Quaternion.Lerp(Yo.transform.rotation, Quaternion.Euler(0, Yo.rotation, 0),
             2 * Time.deltaTime);
-        
+
         if (Yo.ActualP == 0)
         {
             //Debug.Log("Move to P1");
             Vector2 newP;
-            newP = Vector2.MoveTowards(Yo.transform.position, Yo.leftPoint.transform.position, Yo.speed * Time.deltaTime);
+            newP = Vector2.MoveTowards(Yo.transform.position, Yo.leftPoint.transform.position,
+                Yo.speed * Time.deltaTime);
             newP = new Vector2(newP.x, Yo.transform.position.y);
             Yo.transform.position = newP;
         }
@@ -53,7 +52,8 @@ public class Patrol : InterfaceIA
         {
             // Debug.Log("Move to P2");
             Vector2 newP;
-            newP = Vector2.MoveTowards(Yo.transform.position, Yo.rightPoint.transform.position, Yo.speed * Time.deltaTime);
+            newP = Vector2.MoveTowards(Yo.transform.position, Yo.rightPoint.transform.position,
+                Yo.speed * Time.deltaTime);
             newP = new Vector2(newP.x, Yo.transform.position.y);
             Yo.transform.position = newP;
         }
@@ -66,14 +66,9 @@ public class Patrol : InterfaceIA
 
     bool SeePlayer()
     {
-        bool ret = false;
-
-        if (Vector2.Distance(Yo.transform.position, GameController.getInstance().PlayerController.transform.position) <=
-            Yo.rangeChase)
-        {
-            ret = true;
-        }
-
-        return ret;
+        return Mathf.Abs(Yo.transform.position.y - GameController.getInstance().PlayerController.transform.position.y) <
+            .1f && Vector2.Distance(Yo.transform.position,
+                GameController.getInstance().PlayerController.transform.position) <=
+            Yo.rangeChase;
     }
 }

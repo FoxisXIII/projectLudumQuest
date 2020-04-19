@@ -53,8 +53,8 @@ public class PlayerController : MonoBehaviour
 
         foreach (var child in transform.GetComponentsInChildren<SpriteRenderer>())
         {
-            if (child.material.name.Equals(inkMaterial.name))
-            child.material = inkMaterial;
+            if (!child.gameObject.name.Equals("Eyes"))
+                child.material = inkMaterial;
         }
 
         _animator = GetComponent<Animator>();
@@ -91,6 +91,8 @@ public class PlayerController : MonoBehaviour
         inkLevelImageUI.fillAmount = ink;
         inkLevelTextUI.text = (int) (ink * 100) + "%";
         inkSpeedUI.text = "x" + (inkSpeed * 100).ToString("F2");
+        if(inkSpeed * 100>3)inkSpeedUI.color=Color.red;
+        else inkSpeedUI.color=Color.black;
 
 
         inkMaterial.SetFloat("_Fade", ink / 2);
@@ -107,44 +109,38 @@ public class PlayerController : MonoBehaviour
         Vector2 movement = new Vector2();
         if (!_animator.GetBool("ATTACK"))
         {
-            if (!_animator.GetBool("JUMP")||!inGround)
+            if (Input.GetKey(KeyCode.D))
             {
-                if (Input.GetKey(KeyCode.D))
-                {
-                    movement.x = speed * Time.deltaTime;
-                    rotation = 0;
-                    if(push&&pushPos>0)
-                        _animator.SetBool("PUSH", true);
-                    else
+                movement.x = speed * Time.deltaTime;
+                rotation = 0;
+                if (push && pushPos > 0)
+                    _animator.SetBool("PUSH", true);
+                else
                     _animator.SetBool("WALK", true);
-                }
-
-                if (Input.GetKey(KeyCode.A))
-                {
-                    movement.x = -speed * Time.deltaTime;
-                    rotation = 180;
-                    if(push&&pushPos<0)
-                        _animator.SetBool("PUSH", true);
-                    else
-                    _animator.SetBool("WALK", true);
-                }
-
-                if (movement.x == 0)
-                {
-                    _animator.SetBool("PUSH", false);
-                    _animator.SetBool("WALK", false);
-                    _animator.SetBool("IDLE", true);
-                }
-                
             }
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, rotation, 0),
-                rotationSpeed * Time.deltaTime);
-            
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                movement.x = -speed * Time.deltaTime;
+                rotation = 180;
+                if (push && pushPos < 0)
+                    _animator.SetBool("PUSH", true);
+                else
+                    _animator.SetBool("WALK", true);
+            }
+
+            if (movement.x == 0)
+            {
+                _animator.SetBool("PUSH", false);
+                _animator.SetBool("WALK", false);
+                _animator.SetBool("IDLE", true);
+            }
+
             movement.y = _rigidbody.velocity.y;
             if (inGround && !climbLadder && Input.GetKey(KeyCode.Space))
             {
                 _animator.SetBool("WALK", false);
-                _animator.SetBool("JUMP",true);
+                _animator.SetBool("JUMP", true);
             }
             else if (!inGround)
             {
@@ -161,7 +157,7 @@ public class PlayerController : MonoBehaviour
                 movement.y = jumpSpeed;
                 jump = false;
             }
-            
+
             if (climbLadder)
             {
                 _animator.SetBool("CLIMB_LADDER", true);
@@ -182,6 +178,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, rotation, 0),
+            rotationSpeed * Time.deltaTime);
         _rigidbody.velocity = movement;
     }
 
@@ -203,8 +201,12 @@ public class PlayerController : MonoBehaviour
                 push = true;
                 if (transform.position.y <= other.transform.position.y)
                 {
-                    other.rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
-                    pushPos = Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) ? 1 : -1;
+                    if ((Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) && rotation == 0) ||
+                        (Mathf.Abs(other.transform.position.x) < Mathf.Abs(transform.position.x) && rotation == 180))
+                    {
+                        other.rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
+                        pushPos = Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) ? 1 : -1;
+                    }
                 }
                 else
                 {
@@ -266,7 +268,7 @@ public class PlayerController : MonoBehaviour
         if (!jump)
             jump = true;
     }
-    
+
     public void StopJump()
     {
         _animator.SetBool("JUMP", false);
@@ -274,11 +276,9 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        if (enemy != null && ((Mathf.Abs(enemy.transform.position.x) > Mathf.Abs(transform.position.x)) &&
-                              rotation == 0 ||
-                              (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x)) &&
-                              rotation == 180))
-
+        if (enemy != null &&
+            ((Mathf.Abs(enemy.transform.position.x) > Mathf.Abs(transform.position.x) && rotation == 0) ||
+             (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x) && rotation == 180)))
             enemy.TakeDamage(damage);
     }
 
