@@ -8,7 +8,7 @@ public class ChangeScene : MonoBehaviour
     public string level;
 
     public AudioClip Clip;
-    
+
 
     public void LoadScene()
     {
@@ -26,5 +26,11 @@ public class ChangeScene : MonoBehaviour
     {
         FindObjectOfType<AudioManager>().PlayUI(Clip);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void Next()
+    {
+        FindObjectOfType<AudioManager>().PlayUI(Clip);
+        SceneManager.LoadScene(GameObject.FindWithTag("Victory").GetComponent<ChangeScene>().level);
     }
 }

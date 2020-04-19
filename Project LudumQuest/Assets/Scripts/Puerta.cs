@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Puerta : MonoBehaviour
 {
-
-    public bool abierta = false;
     public float speed = 1f;
-    public Vector2 posPressed;
+    public IInteractuable interactuable;
+    private Vector2 posPressed;
     
     // Start is called before the first frame update
     void Start()
@@ -19,7 +18,7 @@ public class Puerta : MonoBehaviour
     void Update()
     {
 
-        if (abierta)
+        if (interactuable.On())
         {
             transform.position=Vector2.MoveTowards(transform.position, posPressed, speed*Time.deltaTime);
             

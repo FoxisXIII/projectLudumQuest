@@ -10,6 +10,8 @@ TagManager:
   - Enemy
   - Ink
   - Victory
+  - Button
+  - Palanca
   layers:
   - Default
   - TransparentFX
