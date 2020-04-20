@@ -14,7 +14,7 @@ public class Puerta : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        posPressed = new Vector2(transform.position.x, transform.position.y + 4);
+        posPressed = new Vector2(transform.position.x, transform.position.y + 7);
     }
 
     // Update is called once per frame

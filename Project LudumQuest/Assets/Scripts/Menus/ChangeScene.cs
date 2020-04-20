@@ -12,6 +12,7 @@ public class ChangeScene : MonoBehaviour
 
     public void LoadScene()
     {
+        Time.timeScale = 1;
         FindObjectOfType<AudioManager>().PlayUI(Clip);
         SceneManager.LoadScene(level);
     }
@@ -24,12 +25,14 @@ public class ChangeScene : MonoBehaviour
 
     public void Retry()
     {
+        Time.timeScale = 1;
         FindObjectOfType<AudioManager>().PlayUI(Clip);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void Next()
     {
+        Time.timeScale = 1;
         FindObjectOfType<AudioManager>().PlayUI(Clip);
         SceneManager.LoadScene(GameObject.FindWithTag("Victory").GetComponent<ChangeScene>().level);
     }
