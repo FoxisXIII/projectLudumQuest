@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip[] sounds;
 
     private AudioSource _audioSource;
+    private bool noInGround;
 
     // Start is called before the first frame update
     void Awake()
@@ -88,10 +89,13 @@ public class PlayerController : MonoBehaviour
 
     private void Ink()
     {
-        ink -= Mathf.Max(inkSpeed * Time.deltaTime, 0);
         if (ink <= 0)
         {
             GameController.getInstance().LevelManager.Defeat();
+        }
+        else
+        {
+            ink -= inkSpeed * Time.deltaTime;
         }
 
         inkLevelImageUI.fillAmount = ink;
@@ -150,11 +154,17 @@ public class PlayerController : MonoBehaviour
             }
             else if (!inGround)
             {
-                _animator.SetBool("FALL", true);
+                // _animator.SetBool("FALL", true);
             }
             else
             {
                 _animator.SetBool("FALL", false);
+                if (noInGround)
+                {
+                    _animator.SetBool("JUMP", false);
+                    noInGround = false;
+                }
+
                 _animator.SetBool("IDLE", true);
             }
 
@@ -166,15 +176,17 @@ public class PlayerController : MonoBehaviour
 
             if (climbLadder)
             {
-                _animator.SetBool("CLIMB_LADDER", true);
+                _animator.SetBool("JUMP", false);
                 movement.y = 0;
                 if (Input.GetKey(KeyCode.W))
                 {
+                    _animator.SetBool("CLIMB_LADDER", true);
                     movement.y = speed * Time.deltaTime;
                 }
 
                 if (Input.GetKey(KeyCode.S))
                 {
+                    _animator.SetBool("CLIMB_LADDER", true);
                     movement.y = -speed * Time.deltaTime;
                 }
             }
@@ -207,11 +219,13 @@ public class PlayerController : MonoBehaviour
                 push = true;
                 if (transform.position.y <= other.transform.position.y)
                 {
-                    if ((Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) && rotation == 0) ||
-                        (Mathf.Abs(other.transform.position.x) < Mathf.Abs(transform.position.x) && rotation == 180))
+                    print("SMTH");
+                    if ((Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) && _rigidbody.velocity.x>0) ||
+                        (Mathf.Abs(other.transform.position.x) < Mathf.Abs(transform.position.x) && _rigidbody.velocity.x<0))
                     {
                         other.rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
                         pushPos = Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) ? 1 : -1;
+                        print(push+" _ "+pushPos);
                     }
                 }
                 else
@@ -231,7 +245,6 @@ public class PlayerController : MonoBehaviour
                 inGround = false;
                 break;
             case "Pushable":
-                inGround = false;
                 push = false;
                 break;
         }
@@ -263,9 +276,8 @@ public class PlayerController : MonoBehaviour
                 enemy = null;
                 break;
             case "Ladder":
-                _rigidbody.gravityScale = 5;
+                _rigidbody.gravityScale = 3;
                 climbLadder = false;
-                inGround = false;
                 break;
         }
     }
@@ -280,9 +292,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void NoInGround()
+    {
+        noInGround = true;
+    }
+
     public void StopJump()
     {
         _animator.SetBool("JUMP", false);
+        jump = false;
         _audioSource.clip = sounds[3];
         _audioSource.Play();
     }
@@ -290,8 +308,8 @@ public class PlayerController : MonoBehaviour
     public void Attack()
     {
         if (enemy != null &&
-            ((Mathf.Abs(enemy.transform.position.x) > Mathf.Abs(transform.position.x) && rotation == 0) ||
-             (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x) && rotation == 180)))
+            ((Mathf.Abs(enemy.transform.position.x) > Mathf.Abs(transform.position.x) && _rigidbody.velocity.x>0) ||
+             (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x) && _rigidbody.velocity.x<0)))
         {
             _audioSource.clip = sounds[5];
             _audioSource.Play();

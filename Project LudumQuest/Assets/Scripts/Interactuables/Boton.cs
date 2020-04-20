@@ -17,7 +17,7 @@ public class Boton : Interactuable
         if (!other.CompareTag("Floor") && !other.CompareTag("Ladder"))
             if (!hasToActivate || hasToActivate && activateThis.On())
             {
-                if (!other.isTrigger && other.CompareTag("Player"))
+                if (!other.isTrigger)
                 {
                     AudioSource.Play();
                 }
@@ -29,7 +29,7 @@ public class Boton : Interactuable
         if (!other.CompareTag("Floor") && !other.CompareTag("Ladder"))
             if (!hasToActivate || hasToActivate && activateThis.On())
             {
-                if (!other.isTrigger&&other.CompareTag("Player"))
+                if (!other.isTrigger)
                 {
                     pressed = true;
                     transform.GetChild(0).gameObject.SetActive(false);
@@ -43,7 +43,7 @@ public class Boton : Interactuable
         if (!other.CompareTag("Floor") && !other.CompareTag("Ladder"))
             if (!hasToActivate || hasToActivate && activateThis.On())
             {
-                if (!other.isTrigger&&other.CompareTag("Player"))
+                if (!other.isTrigger)
                 {
                     pressed = false;
                     transform.GetChild(0).gameObject.SetActive(true);

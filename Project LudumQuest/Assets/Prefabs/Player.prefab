@@ -1448,7 +1448,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 250
-  jumpSpeed: 15
+  jumpSpeed: 20
   rotationSpeed: 2
   ink: 0
   prefabink: {fileID: 0}
