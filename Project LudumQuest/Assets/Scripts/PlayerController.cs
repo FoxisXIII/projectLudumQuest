@@ -124,9 +124,15 @@ public class PlayerController : MonoBehaviour
                 movement.x = speed * Time.deltaTime;
                 rotation = 0;
                 if (push && pushPos > 0)
+                {
+                    _animator.SetBool("WALK", false);
                     _animator.SetBool("PUSH", true);
+                }
                 else
+                {
+                    _animator.SetBool("PUSH", false);
                     _animator.SetBool("WALK", true);
+                }
             }
 
             if (Input.GetKey(KeyCode.A))
@@ -134,9 +140,15 @@ public class PlayerController : MonoBehaviour
                 movement.x = -speed * Time.deltaTime;
                 rotation = 180;
                 if (push && pushPos < 0)
+                {
+                    _animator.SetBool("WALK", false);
                     _animator.SetBool("PUSH", true);
+                }
                 else
+                {
+                    _animator.SetBool("PUSH", false);
                     _animator.SetBool("WALK", true);
+                }
             }
 
             if (movement.x == 0)
@@ -219,13 +231,11 @@ public class PlayerController : MonoBehaviour
                 push = true;
                 if (transform.position.y <= other.transform.position.y)
                 {
-                    print("SMTH");
                     if ((Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) && _rigidbody.velocity.x>0) ||
                         (Mathf.Abs(other.transform.position.x) < Mathf.Abs(transform.position.x) && _rigidbody.velocity.x<0))
                     {
                         other.rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
                         pushPos = Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) ? 1 : -1;
-                        print(push+" _ "+pushPos);
                     }
                 }
                 else
