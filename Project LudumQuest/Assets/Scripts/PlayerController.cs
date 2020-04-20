@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -74,7 +73,7 @@ public class PlayerController : MonoBehaviour
         {
             Movement();
 
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (!climbLadder && Input.GetKeyDown(KeyCode.Mouse0))
                 AttackEnemies();
         }
 
@@ -231,8 +230,10 @@ public class PlayerController : MonoBehaviour
                 push = true;
                 if (transform.position.y <= other.transform.position.y)
                 {
-                    if ((Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) && _rigidbody.velocity.x>0) ||
-                        (Mathf.Abs(other.transform.position.x) < Mathf.Abs(transform.position.x) && _rigidbody.velocity.x<0))
+                    if ((Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) &&
+                         _rigidbody.velocity.x > 0) ||
+                        (Mathf.Abs(other.transform.position.x) < Mathf.Abs(transform.position.x) &&
+                         _rigidbody.velocity.x < 0))
                     {
                         other.rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
                         pushPos = Mathf.Abs(other.transform.position.x) > Mathf.Abs(transform.position.x) ? 1 : -1;
@@ -318,8 +319,8 @@ public class PlayerController : MonoBehaviour
     public void Attack()
     {
         if (enemy != null &&
-            ((Mathf.Abs(enemy.transform.position.x) > Mathf.Abs(transform.position.x) && _rigidbody.velocity.x>0) ||
-             (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x) && _rigidbody.velocity.x<0)))
+            ((Mathf.Abs(enemy.transform.position.x) > Mathf.Abs(transform.position.x) && rotation <= 25) ||
+             (Mathf.Abs(enemy.transform.position.x) < Mathf.Abs(transform.position.x) && rotation >= 155)))
         {
             _audioSource.clip = sounds[5];
             _audioSource.Play();
